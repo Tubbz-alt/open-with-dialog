@@ -2,6 +2,7 @@
 #define MIMESAPPSMANAGER_H
 
 #include "singleton.h"
+#include "desktopfile.h"
 #include "dtkwidget_global.h"
 
 #include <QMap>
@@ -14,12 +15,7 @@
 #include <QStringList>
 #include <QFileSystemWatcher>
 
-#include <DDesktopEntry>
-
 #define mimeAppsManager Singleton<MimesAppsManager>::instance()
-
-DCORE_USE_NAMESPACE
-//DWIDGET_USE_NAMESPACE
 
 class MimeAppsWorker: public QObject
 {
@@ -58,11 +54,11 @@ public:
     static QMap<QString, QStringList> MimeApps;
     static QMap<QString, QStringList> DDE_MimeTypes;
 //    specially cache for video, image, text and audio
-//    static QMap<QString, DDesktopEntry> VideoMimeApps;
-//    static QMap<QString, DDesktopEntry> ImageMimeApps;
-//    static QMap<QString, DDesktopEntry> TextMimeApps;
-//    static QMap<QString, DDesktopEntry> AudioMimeApps;
-//    static QMap<QString, DDesktopEntry> DesktopObjs;
+    static QMap<QString, DesktopFile> VideoMimeApps;
+    static QMap<QString, DesktopFile> ImageMimeApps;
+    static QMap<QString, DesktopFile>TextMimeApps;
+    static QMap<QString, DesktopFile> AudioMimeApps;
+    static QMap<QString, DesktopFile> DesktopObjs;
 
     static QMimeType getMimeType(const QString& fileName);
     static QString getMimeTypeByFileName(const QString& fileName);
@@ -90,11 +86,12 @@ public:
 //    static QString getDesktopIconsCacheFile();
     static QStringList getDesktopFiles();
     static QString getDDEMimeTypeFile();
-//    static QMap<QString, DDesktopEntry> getDesktopObjs();
+    static QMap<QString, DesktopFile> getDesktopObjs();
     static void initMimeTypeApps();
     static void loadDDEMimeTypes();
     static bool lessByDateTime(const QFileInfo& f1,  const QFileInfo& f2);
     static bool removeOneDupFromList(QStringList& list, const QString desktopFilePath);
+
 
 signals:
     void requestUpdateCache();

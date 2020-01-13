@@ -27,13 +27,15 @@ pkg_check_modules(GIOUNIX gio-unix-2.0)
 set (OPENWITH_CPP_FILES
     main.cpp
     mainwindow.cpp
+    desktopfile.cpp
     mimesappsmanager.cpp
 )
 
 set (OPENWITH_HEADER_FILES
-    mainwindow.h
-    mimesappsmanager.h
     singleton.h
+    mainwindow.h
+    desktopfile.h
+    mimesappsmanager.h
 )
 
 set (OPENWITH_QRC_FILES

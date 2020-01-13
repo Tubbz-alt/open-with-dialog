@@ -25,6 +25,8 @@
 
 #include <dflowlayout.h>
 
+#include <QUrl>
+#include <QMimeType>
 #include <DAbstractDialog>
 
 QT_BEGIN_NAMESPACE
@@ -108,6 +110,9 @@ private:
     QCommandLinkButton *m_openFileChooseButton = nullptr;
     QPushButton *m_cancelButton = nullptr;
     QPushButton *m_chooseButton = nullptr;
+
+    QUrl m_url;
+    QMimeType m_mimeType;
 
     OpenWithDialogListItem *m_checkedItem = nullptr;
     DTitlebar *m_titlebar = nullptr;
