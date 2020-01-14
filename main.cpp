@@ -21,14 +21,15 @@
 
 
 #include "mainwindow.h"
+#include "mimesappsmanager.h"
 
+#include <DLog>
 #include <DApplication>
 #include <DApplicationSettings>
-#include <DLog>
 
 #include <QDebug>
-#include <QCommandLineParser>
 #include <QTranslator>
+#include <QCommandLineParser>
 
 DWIDGET_USE_NAMESPACE
 
@@ -36,7 +37,6 @@ DCORE_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
-
     DApplication::loadDXcbPlugin();
     DApplication app(argc,argv);
     app.setQuitOnLastWindowClosed(true);
@@ -54,11 +54,10 @@ int main(int argc, char *argv[])
     //Logger handle
     DLogManager::registerConsoleAppender();
 
+//    QTimer::singleShot(100, mimeAppsManager, &MimesAppsManager::requestUpdateCache);
+
     MainWindow mw;
     mw.show();
-
-
-    qDebug() << "Hello World!";
 
     return app.exec();
 }

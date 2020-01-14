@@ -23,8 +23,9 @@
 #include "desktopfile.h"
 
 #include <QFile>
-#include <QSettings>
 #include <QDebug>
+#include <QVariant>
+#include <QSettings>
 
 DesktopFile::DesktopFile(const QString &fileName) {
 
@@ -70,10 +71,12 @@ DesktopFile::DesktopFile(const QString &fileName) {
     }
 
     if(desktop.contains("NoDisplay")){
-        m_noDisplay = desktop.stringValue("NoDisplay", "Desktop Entry", settings.value("NoDisplay").toString()).toInt();
+        QVariant tmpVal = desktop.stringValue("NoDisplay", "Desktop Entry", settings.value("NoDisplay").toString());
+        m_noDisplay = tmpVal.toBool();
     }
     if(desktop.contains("Hidden")){
-        m_hidden = desktop.stringValue("NoDisplay", "Desktop Entry", settings.value("NoDisplay").toString()).toInt();
+        QVariant tmpVal = desktop.stringValue("NoDisplay", "Desktop Entry", settings.value("NoDisplay").toString()).toInt();
+        m_hidden = tmpVal.toBool();;
     }
 
     m_exec = desktop.stringValue("Exec", "Desktop Entry", settings.value("Exec").toString());

@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "fileutils.h"
 #include "mainwindow.h"
 #include "mimesappsmanager.h"
 
@@ -36,7 +37,6 @@
 #include <QMimeDatabase>
 #include <QStandardPaths>
 #include <QCommandLinkButton>
-
 
 
 OpenWithDialogListItem::OpenWithDialogListItem(const QIcon &icon, const QString &text, QWidget *parent)
@@ -142,6 +142,12 @@ OpenWithDialogListSparerItem::OpenWithDialogListSparerItem(const QString &title,
 
 MainWindow::MainWindow(QWidget *parent) : DAbstractDialog(parent)
 {
+//    m_url = QUrl("file:///home/liuyang/Music/openwith_test.mp3");
+    m_url = QUrl("file:///home/liuyang/Music/abcd.txt");
+//    m_url = QUrl("/usr/share/applications/org.gnome.Evolution.desktop");
+    qDebug() << "----------------------------------------";
+    qDebug() << m_url;
+
     m_titlebar = new DTitlebar(this);
     m_titlebar->setBackgroundTransparent(true);
     m_titlebar->setTitle(tr("Open with"));
@@ -150,6 +156,9 @@ MainWindow::MainWindow(QWidget *parent) : DAbstractDialog(parent)
                            &~ Qt::WindowMaximizeButtonHint
                            &~ Qt::WindowMinimizeButtonHint
                            &~ Qt::WindowSystemMenuHint);
+
+    mimeAppsManager->initMimeTypeApps();
+
     initUI();
     initConnect();
     initData();
@@ -170,8 +179,12 @@ void MainWindow::openFileByApp()
     if (m_setToDefaultCheckBox->isChecked())
         mimeAppsManager->setDefautlAppForTypeByGio(m_mimeType.name(), app);
 
-//    if (DFileService::instance()->openFileByApp(this, app, m_url))
-//        close();
+    QStringList paths;
+    paths << m_url.toString();
+
+    if (FileUtils::openFilesByApp(app, paths)) {
+        close();
+    }
 }
 
 void MainWindow::showEvent(QShowEvent *event)
@@ -285,9 +298,12 @@ void MainWindow::initData()
     m_mimeType = db.mimeTypeForUrl(m_url);
 
     //m_url file is desktopFile, what To DO ?
+    if (m_mimeType.name() == "application/x-desktop") {
+        m_setToDefaultCheckBox->hide();
+    }
 
-//    if (file_info->isDesktopFile())
-//        m_setToDefaultCheckBox->hide();
+    qDebug() << "------------------------------";
+    qDebug() << m_mimeType.name();
 
     const QString &default_app = mimeAppsManager->getDefaultAppByMimeType(m_mimeType);
     const QStringList &recommendApps = mimeAppsManager->getRecommendedAppsByQio(m_mimeType);
@@ -303,6 +319,17 @@ void MainWindow::initData()
     }
 
     QList<DesktopFile> other_app_list;
+
+//    qDebug() << "*******************************************";
+//    QString f("/usr/share/applications/org.gnome.Evolution.desktop");
+////    QString f("/usr/share/applications/deepin-music.desktop");
+//    qDebug() << recommendApps.contains(f);
+//    qDebug() << mimeAppsManager->DesktopObjs.value(f).getNoShow();
+//    qDebug() << mimeAppsManager->DesktopObjs.value(f).getMimeType();
+//    DDesktopEntry file(f);
+//    qDebug() << file.rawValue("Actions");
+//    qDebug() << file.stringValue("Actions");
+//    qDebug() << file.localizedValue("Actions");
 
     foreach (const QString& f, mimeAppsManager->DesktopObjs.keys()) {
         //filter recommend apps , no show apps and no mime support apps
@@ -340,6 +367,10 @@ void MainWindow::initData()
 
         if (!default_app.isEmpty() && f.endsWith(default_app))
             checkItem(item);
+
+        qDebug() << "--------------------------------";
+        qDebug() << f;
+        qDebug() << other_app_list.count();
     }
 }
 

@@ -26,6 +26,7 @@ pkg_check_modules(GIOUNIX gio-unix-2.0)
 # Populate a CMake variable with the sources
 set (OPENWITH_CPP_FILES
     main.cpp
+    fileutils.cpp
     mainwindow.cpp
     desktopfile.cpp
     mimesappsmanager.cpp
@@ -33,6 +34,7 @@ set (OPENWITH_CPP_FILES
 
 set (OPENWITH_HEADER_FILES
     singleton.h
+    fileutils.h
     mainwindow.h
     desktopfile.h
     mimesappsmanager.h

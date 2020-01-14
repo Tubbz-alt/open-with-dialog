@@ -101,7 +101,7 @@ QByteArray MimeAppsWorker::readData(const QString &path)
 MimesAppsManager::MimesAppsManager(QObject *parent): QObject(parent)
 {
     m_mimeAppsWorker = new MimeAppsWorker;
-//    connect(this, &MimesAppsManager::requestUpdateCache, m_mimeAppsWorker, &MimeAppsWorker::updateCache);
+    connect(this, &MimesAppsManager::requestUpdateCache, m_mimeAppsWorker, &MimeAppsWorker::updateCache);
     QThread* mimeAppsThread = new QThread;
     m_mimeAppsWorker->moveToThread(mimeAppsThread);
     mimeAppsThread->start();
