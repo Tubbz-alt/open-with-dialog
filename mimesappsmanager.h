@@ -73,7 +73,7 @@ public:
                                      const QString& targetAppName);
 
     static QStringList getRecommendedApps(const QUrl& url);
-    static QStringList getRecommendedAppsByQio(const QMimeType& mimeType);
+    static QStringList getRecommendedAppsByQio(const QMimeType& mimeType, QString mimeTypeName = QString());
     static QStringList getRecommendedAppsByGio(const QString& mimeType);
 //    static QStringList getrecommendedAppsFromMimeWhiteList(const QUrl& url);
 

@@ -140,13 +140,18 @@ OpenWithDialogListSparerItem::OpenWithDialogListSparerItem(const QString &title,
 }
 
 
-MainWindow::MainWindow(QWidget *parent) : DAbstractDialog(parent)
+MainWindow::MainWindow(const QStringList &urls, QString mimeTypeName, QWidget *parent) : DAbstractDialog(parent),
+    m_urls(urls), m_mimeTypeName(mimeTypeName)
 {
-//    m_url = QUrl("file:///home/liuyang/Music/openwith_test.mp3");
-    m_url = QUrl("file:///home/liuyang/Music/abcd.txt");
-//    m_url = QUrl("/usr/share/applications/org.gnome.Evolution.desktop");
+//    m_urls << QUrl("file:///home/liuyang/Music/openwith_test.mp3");
+//    m_urls << QUrl("file:///home/liuyang/Music/abcd.txt");
+//    m_urls << QUrl("file:/usr/share/applications/org.gnome.Evolution.desktop");
+//    m_urls << "file:///home/liuyang/Music/123.txt";
+
+//    m_urls << "file:///home/liuyang/Music/abcd.txt";
+
     qDebug() << "----------------------------------------";
-    qDebug() << m_url;
+    qDebug() << m_urls;
 
     m_titlebar = new DTitlebar(this);
     m_titlebar->setBackgroundTransparent(true);
@@ -176,13 +181,14 @@ void MainWindow::openFileByApp()
 
     const QString &app = m_checkedItem->property("app").toString();
 
-    if (m_setToDefaultCheckBox->isChecked())
-        mimeAppsManager->setDefautlAppForTypeByGio(m_mimeType.name(), app);
+    if (m_setToDefaultCheckBox->isChecked()) {
+        mimeAppsManager->setDefautlAppForTypeByGio(m_mimeTypeName, app);
+    }
 
-    QStringList paths;
-    paths << m_url.toString();
+//    QStringList paths;
+//    paths << m_url.toString();
 
-    if (FileUtils::openFilesByApp(app, paths)) {
+    if (FileUtils::openFilesByApp(app, m_urls)) {
         close();
     }
 }
@@ -295,18 +301,23 @@ void MainWindow::initData()
 {
 
     QMimeDatabase db;
-    m_mimeType = db.mimeTypeForUrl(m_url);
+    m_mimeType = db.mimeTypeForUrl(QUrl(m_urls.first()));
+
+    if (m_mimeTypeName.isEmpty()) {
+        m_mimeTypeName = m_mimeType.name();
+    }
 
     //m_url file is desktopFile, what To DO ?
-    if (m_mimeType.name() == "application/x-desktop") {
+    if (m_mimeTypeName == "application/x-desktop") {
         m_setToDefaultCheckBox->hide();
     }
 
     qDebug() << "------------------------------";
     qDebug() << m_mimeType.name();
 
-    const QString &default_app = mimeAppsManager->getDefaultAppByMimeType(m_mimeType);
-    const QStringList &recommendApps = mimeAppsManager->getRecommendedAppsByQio(m_mimeType);
+    const QString &default_app = mimeAppsManager->getDefaultAppByMimeType(m_mimeTypeName);
+
+    const QStringList &recommendApps = mimeAppsManager->getRecommendedAppsByQio(m_mimeType, m_mimeTypeName);
 
     for (int i = 0; i < recommendApps.count(); ++i) {
         const DesktopFile desktop_info = mimeAppsManager->DesktopObjs.value(recommendApps.at(i));
@@ -354,7 +365,7 @@ void MainWindow::initData()
         const QString &custom_open_desktop = desktop_info.stringValue("X-DDE-File-Manager-Custom-Open");
 
         // Filter self own desktop files for opening other types of files
-        if (!custom_open_desktop.isEmpty() && custom_open_desktop != m_mimeType.name())
+        if (!custom_open_desktop.isEmpty() && custom_open_desktop != m_mimeTypeName)
             continue;
 
         if (isSameDesktop)
@@ -368,9 +379,9 @@ void MainWindow::initData()
         if (!default_app.isEmpty() && f.endsWith(default_app))
             checkItem(item);
 
-        qDebug() << "--------------------------------";
-        qDebug() << f;
-        qDebug() << other_app_list.count();
+//        qDebug() << "--------------------------------";
+//        qDebug() << f;
+//        qDebug() << other_app_list.count();
     }
 }
 
@@ -393,7 +404,7 @@ void MainWindow::useOtherApplication()
     QFileInfo info(file_path);
     QString target_desktop_file_name("%1/%2-custom-open-%3.desktop");
 
-    target_desktop_file_name = target_desktop_file_name.arg(QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation)).arg(qApp->applicationName()).arg(m_mimeType.name().replace("/", "-"));
+    target_desktop_file_name = target_desktop_file_name.arg(QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation)).arg(qApp->applicationName()).arg(m_mimeTypeName.replace("/", "-"));
 
     if (file_path.endsWith(".desktop")) {
         for (const MainWindow *w : m_recommandLayout->parentWidget()->findChildren<MainWindow*>()) {
@@ -416,7 +427,7 @@ void MainWindow::useOtherApplication()
         desktop.setStringValue("Icon", "application-x-desktop");
         desktop.setStringValue("Exec", file_path);
         desktop.setStringValue("MimeType", "*/*");
-        desktop.setStringValue("X-DDE-File-Manager-Custom-Open", m_mimeType.name());
+        desktop.setStringValue("X-DDE-File-Manager-Custom-Open", m_mimeTypeName);
 
         if (QFile::exists(target_desktop_file_name))
             QFile(target_desktop_file_name).remove();

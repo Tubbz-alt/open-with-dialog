@@ -15,7 +15,7 @@ set(CMAKE_CXX_FLAGS "-g -Wall")
 set(QT_MINIMUM_VERSION "5.7.1")
 
 # Find the QtWidgets library
-find_package(Qt5 ${QT_MINIMUM_VERSION} CONFIG REQUIRED Widgets LinguistTools)
+find_package(Qt5 ${QT_MINIMUM_VERSION} CONFIG REQUIRED Widgets DBus X11Extras LinguistTools)
 find_package(Dtk REQUIRED Core Widget Tools)
 find_package(PkgConfig REQUIRED)
 
@@ -30,6 +30,7 @@ set (OPENWITH_CPP_FILES
     mainwindow.cpp
     desktopfile.cpp
     mimesappsmanager.cpp
+    commandlinemanager.cpp
 )
 
 set (OPENWITH_HEADER_FILES
@@ -38,13 +39,15 @@ set (OPENWITH_HEADER_FILES
     mainwindow.h
     desktopfile.h
     mimesappsmanager.h
+    commandlinemanager.h
 )
 
 set (OPENWITH_QRC_FILES
 )
 
-# Program
+# set name for Exec and Lib
 set (EXE_NAME open-with-dialog)
+set (LIB_NAME openwithdialog)
 
 # Translation
 file (GLOB OPENWITH_TS_FILES translations/*.ts)
@@ -54,6 +57,7 @@ dtk_create_i18n_from_json(OPENWITH_SETTINGS_I18N_FILES default-config.json setti
 list (APPEND OPENWITH_CPP_FILES_FOR_I18N ${OPENWITH_SETTINGS_I18N_FILES})
 qt5_create_translation(OPENWITH_QM_FILES ${OPENWITH_CPP_FILES_FOR_I18N} ${OPENWITH_TS_FILES})
 
+#generate exec
 add_executable(${EXE_NAME}
     ${OPENWITH_CPP_FILES}
     ${OPENWITH_HEADER_FILES}
@@ -67,13 +71,31 @@ target_include_directories(${EXE_NAME} PUBLIC
 )
 
 target_link_libraries (${EXE_NAME}
-    Qt5::Widgets
+    Qt5::Widgets Qt5::DBus Qt5::X11Extras
     ${DtkWidget_LIBRARIES}
     ${GIOMM_LIBRARIES}
     ${GIOUNIX_INCLUDE_DIRS}
 )
 
+#generate lib
+add_library(${LIB_NAME} SHARED
+    ${OPENWITH_CPP_FILES}
+    ${OPENWITH_HEADER_FILES}
+    ${OPENWITH_QRC_FILES}
+)
 
+target_include_directories(${LIB_NAME} PUBLIC
+    ${DtkWidget_INCLUDE_DIRS}
+    ${GIOMM_INCLUDE_DIRS}
+    ${GIOUNIX_INCLUDE_DIRS}
+)
+
+target_link_libraries (${LIB_NAME}
+    Qt5::Widgets Qt5::DBus Qt5::X11Extras
+    ${DtkWidget_LIBRARIES}
+    ${GIOMM_LIBRARIES}
+    ${GIOUNIX_INCLUDE_DIRS}
+)
 
 
 

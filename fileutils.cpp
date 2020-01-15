@@ -31,6 +31,10 @@
 #include <QStandardPaths>
 #include <QDesktopServices>
 
+#include <QtX11Extras/QX11Info>
+#include <QtDBus/QDBusInterface>
+#include <QtDBus/QDBusConnection>
+
 #undef signals
 extern "C" {
     #include <gio/gio.h>
@@ -150,7 +154,20 @@ bool FileUtils::launchAppByDBus(const QString& desktopFile, const QStringList& f
 //        appController->startManagerInterface()->LaunchApp(desktopFile, QX11Info::getTimestamp(), filePaths);
 //        return true;
 //    }
-    return false;
+
+    qDebug() << "launchApp by dbus:" << desktopFile << filePaths;
+    QDBusInterface loginManager("com.deepin.SessionManager",
+                                "/com/deepin/StartManager",
+                                "com.deepin.StartManager",
+                                QDBusConnection::sessionBus());
+
+    uint ts = static_cast<uint>(QX11Info::getTimestamp());
+    QList<QVariant> argumentList;
+    argumentList << QVariant::fromValue(desktopFile) << QVariant::fromValue(ts) << QVariant::fromValue(filePaths);
+
+    loginManager.callWithArgumentList(QDBus::NoBlock, QStringLiteral("LaunchApp"), argumentList);
+
+    return true;
 }
 
 bool FileUtils::launchAppByGio(const QString& desktopFile, const QStringList& filePaths)

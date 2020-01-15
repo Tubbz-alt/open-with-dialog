@@ -22,6 +22,7 @@
 
 #include "mainwindow.h"
 #include "mimesappsmanager.h"
+#include "commandlinemanager.h"
 
 #include <DLog>
 #include <DApplication>
@@ -54,10 +55,20 @@ int main(int argc, char *argv[])
     //Logger handle
     DLogManager::registerConsoleAppender();
 
+    //command line parse
+    CommandLineManager cmdMng;
+    cmdMng.process(app.arguments());
+
+    qDebug() << "-----------------parse cmd line-----------------------";
+    qDebug() << cmdMng.mimeTypeData();
+    qDebug() << cmdMng.urlsData();
+
 //    QTimer::singleShot(100, mimeAppsManager, &MimesAppsManager::requestUpdateCache);
 
-    MainWindow mw;
+#if 1
+    MainWindow mw(cmdMng.urlsData(), cmdMng.mimeTypeData());
     mw.show();
+#endif
 
     return app.exec();
 }

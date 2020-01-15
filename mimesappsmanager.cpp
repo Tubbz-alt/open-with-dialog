@@ -269,7 +269,7 @@ QStringList MimesAppsManager::getRecommendedApps(const QUrl &url)
     return recommendedApps;
 }
 
-QStringList MimesAppsManager::getRecommendedAppsByQio(const QMimeType &mimeType)
+QStringList MimesAppsManager::getRecommendedAppsByQio(const QMimeType &mimeType, QString mimeTypeName)
 {
     QStringList recommendApps;
     QList<QMimeType> mimeTypeList;
@@ -283,6 +283,9 @@ QStringList MimesAppsManager::getRecommendedAppsByQio(const QMimeType &mimeType)
 
             type_name_list.append(type.name());
             type_name_list.append(type.aliases());
+            if (!mimeTypeName.isEmpty() && !type_name_list.contains(mimeTypeName)) {
+                type_name_list.append(mimeTypeName);
+            }
 
             foreach (const QString &name, type_name_list) {
                 foreach (const QString &app, mimeAppsManager->MimeApps.value(name)) {

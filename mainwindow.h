@@ -26,6 +26,7 @@
 #include <dflowlayout.h>
 
 #include <QUrl>
+#include <QList>
 #include <QMimeType>
 #include <DAbstractDialog>
 
@@ -84,7 +85,7 @@ class MainWindow : public DAbstractDialog
 {
     Q_OBJECT
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(const QStringList &urls, QString mimeTypeName = QString(), QWidget *parent = nullptr);
     ~MainWindow() override;
 
 public slots:
@@ -111,8 +112,9 @@ private:
     QPushButton *m_cancelButton = nullptr;
     QPushButton *m_chooseButton = nullptr;
 
-    QUrl m_url;
-    QMimeType m_mimeType;
+    QStringList m_urls = {};
+    QMimeType m_mimeType = QMimeType();
+    QString m_mimeTypeName = QString();
 
     OpenWithDialogListItem *m_checkedItem = nullptr;
     DTitlebar *m_titlebar = nullptr;
