@@ -129,6 +129,7 @@ OpenWithDialogListSparerItem::OpenWithDialogListSparerItem(const QString &title,
 {
     QFont font;
     font.setPixelSize(18);
+    font.setBold(true);
     m_title->setFont(font);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
@@ -261,6 +262,16 @@ void MainWindow::initUI()
     m_setToDefaultCheckBox->setChecked(true);
     m_cancelButton = new QPushButton(tr("Cancel"));
     m_chooseButton = new QPushButton(tr("Confirm"));
+
+    QPalette chBtnPal = m_openFileChooseButton->palette();
+    chBtnPal.setColor(QPalette::ButtonText, palette().color(QPalette::Normal, QPalette::Highlight));
+    m_openFileChooseButton->setPalette(chBtnPal);
+
+//    QFont chBtnFnt = m_openFileChooseButton->font();
+////    chBtnFnt.setBold(false);
+//    chBtnFnt.setWeight(QFont::DemiBold);
+//    m_openFileChooseButton->setFont(chBtnFnt);
+
 
     QVBoxLayout* content_layout = new QVBoxLayout;
     content_layout->setContentsMargins(10, 0, 10, 0);
