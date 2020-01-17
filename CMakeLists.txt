@@ -45,7 +45,7 @@ set (OPENWITH_HEADER_FILES
 set (OPENWITH_QRC_FILES
 )
 
-# set name for Exec and Lib
+# set variable name for Exec and Lib
 set (EXE_NAME open-with-dialog)
 set (LIB_NAME openwithdialog)
 

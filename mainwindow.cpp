@@ -148,7 +148,7 @@ MainWindow::MainWindow(const QStringList &urls, QString mimeTypeName, QWidget *p
 //    m_urls << QUrl("file:/usr/share/applications/org.gnome.Evolution.desktop");
 //    m_urls << "file:///home/liuyang/Music/123.txt";
 
-//    m_urls << "file:///home/liuyang/Music/abcd.txt";
+    m_urls << "file:///home/liuyang/Music/abcd.txt";
 
     qDebug() << "----------------------------------------";
     qDebug() << m_urls;
@@ -235,12 +235,16 @@ void MainWindow::initUI()
 {
     setFixedSize(710, 450);
 
+    setWindowOpacity(0.8);
+
     m_scrollArea = new QScrollArea(this);
     m_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_scrollArea->setFrameShape(QFrame::NoFrame);
     m_scrollArea->setWidgetResizable(true);
     QScroller::grabGesture(m_scrollArea);
     m_scrollArea->installEventFilter(this);
+    m_scrollArea->setStyleSheet("background-color: transparent");
+    m_scrollArea->viewport()->setStyleSheet("background-color: transparent");
 
     QWidget *content_widget = new QWidget;
 

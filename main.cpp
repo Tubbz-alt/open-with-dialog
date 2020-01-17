@@ -63,6 +63,11 @@ int main(int argc, char *argv[])
     qDebug() << cmdMng.mimeTypeData();
     qDebug() << cmdMng.urlsData();
 
+//    if (cmdMng.urlsData().isEmpty()) {
+//        qDebug() << "---------------------------- Not give url parameter!";
+//        exit(EXIT_FAILURE);
+//    }
+
 //    QTimer::singleShot(100, mimeAppsManager, &MimesAppsManager::requestUpdateCache);
 
 #if 1
