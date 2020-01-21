@@ -37,6 +37,7 @@
 #include <QMimeDatabase>
 #include <QStandardPaths>
 #include <QCommandLinkButton>
+#include <DSuggestButton>
 
 
 OpenWithDialogListItem::OpenWithDialogListItem(const QIcon &icon, const QString &text, QWidget *parent)
@@ -261,17 +262,15 @@ void MainWindow::initUI()
     m_setToDefaultCheckBox = new QCheckBox(tr("Set as default"));
     m_setToDefaultCheckBox->setChecked(true);
     m_cancelButton = new QPushButton(tr("Cancel"));
-    m_chooseButton = new QPushButton(tr("Confirm"));
+    m_chooseButton = new DSuggestButton(tr("Confirm"));
 
     QPalette chBtnPal = m_openFileChooseButton->palette();
     chBtnPal.setColor(QPalette::ButtonText, palette().color(QPalette::Normal, QPalette::Highlight));
     m_openFileChooseButton->setPalette(chBtnPal);
 
 //    QFont chBtnFnt = m_openFileChooseButton->font();
-////    chBtnFnt.setBold(false);
-//    chBtnFnt.setWeight(QFont::DemiBold);
+///    chBtnFnt.setWeight(QFont::DemiBold);
 //    m_openFileChooseButton->setFont(chBtnFnt);
-
 
     QVBoxLayout* content_layout = new QVBoxLayout;
     content_layout->setContentsMargins(10, 0, 10, 0);

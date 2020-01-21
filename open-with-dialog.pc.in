@@ -1,0 +1,12 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=@CMAKE_INSTALL_PREFIX@
+libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+includedir=${prefix}/include
+
+Name: open-with-dialog
+Description: Open with file dialog by mimetype for libs.
+Version: @PROJECT_VERSION@
+Requires: qt5-default, libdtkwidget-dev, libdframeworkdbus-dev, libdtkcore-dev, libdtkwidget-dev
+
+Libs: -L${libdir} -lopenwithdialog
+Cflags: -I${includedir} -I${includedir}/open-with-dialog

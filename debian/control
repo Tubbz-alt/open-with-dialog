@@ -1,0 +1,32 @@
+Source: open-with-dialog
+Section: libdevel
+Priority: optional
+Maintainer: Liu Yang <liuyang@uniontech.com>
+Build-Depends:
+ debhelper (>= 9),
+ cmake,
+ pkg-config,
+ qt5-default,
+ pkg-config,
+ libdtkwidget-dev,
+ libdframeworkdbus-dev,
+ libdtkcore-dev,
+ libdtkwidget-dev,
+Standards-Version: 3.9.8    
+Homepage: http://www.deepin.org
+
+Package: libopenwithdialog
+Architecture: any
+Depends: s${misc:Depends}
+Description: Open with file dialog by mimetype for libs.
+
+Package: open-with-dialog-dev
+Architecture: any
+Depends: s${misc:Depends}
+Description: Open with file dialog by mimetype for includes.
+
+Package: open-with-dialog
+Architecture: any
+Depends: libgio-qt, ${misc:Depends}
+Description: Open with file dialog by mimetype for exec.
+

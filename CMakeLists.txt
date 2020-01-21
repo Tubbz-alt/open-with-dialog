@@ -6,15 +6,18 @@ add_definitions(-std=c++11)
 
 include(GNUInstallDirs)
 
+# Install settings
+if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set(CMAKE_INSTALL_PREFIX /usr CACHE PATH "default install prefix" FORCE)
+endif ()
+
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Instruct CMake to run moc automatically when needed
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_FLAGS "-g -Wall")
-set(QT_MINIMUM_VERSION "5.7.1")
 
-# Find the QtWidgets library
 find_package(Qt5 ${QT_MINIMUM_VERSION} CONFIG REQUIRED Widgets DBus X11Extras LinguistTools)
 find_package(Dtk REQUIRED Core Widget Tools)
 find_package(PkgConfig REQUIRED)
@@ -22,32 +25,8 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(GIOMM giomm-2.4) # look into FindPkgConfig.cmake
 pkg_check_modules(GIOUNIX gio-unix-2.0)
 
-
-# Populate a CMake variable with the sources
-set (OPENWITH_CPP_FILES
-    main.cpp
-    fileutils.cpp
-    mainwindow.cpp
-    desktopfile.cpp
-    mimesappsmanager.cpp
-    commandlinemanager.cpp
-)
-
-set (OPENWITH_HEADER_FILES
-    singleton.h
-    fileutils.h
-    mainwindow.h
-    desktopfile.h
-    mimesappsmanager.h
-    commandlinemanager.h
-)
-
 set (OPENWITH_QRC_FILES
 )
-
-# set variable name for Exec and Lib
-set (EXE_NAME open-with-dialog)
-set (LIB_NAME openwithdialog)
 
 # Translation
 file (GLOB OPENWITH_TS_FILES translations/*.ts)
@@ -57,45 +36,15 @@ dtk_create_i18n_from_json(OPENWITH_SETTINGS_I18N_FILES default-config.json setti
 list (APPEND OPENWITH_CPP_FILES_FOR_I18N ${OPENWITH_SETTINGS_I18N_FILES})
 qt5_create_translation(OPENWITH_QM_FILES ${OPENWITH_CPP_FILES_FOR_I18N} ${OPENWITH_TS_FILES})
 
-#generate exec
-add_executable(${EXE_NAME}
-    ${OPENWITH_CPP_FILES}
-    ${OPENWITH_HEADER_FILES}
-    ${OPENWITH_QRC_FILES}
-)
+# set variable name for Exec and Lib
+set (EXE_NAME open-with-dialog)
+set (LIB_NAME openwithdialog)
 
-target_include_directories(${EXE_NAME} PUBLIC
-    ${DtkWidget_INCLUDE_DIRS}
-    ${GIOMM_INCLUDE_DIRS}
-    ${GIOUNIX_INCLUDE_DIRS}
-)
+configure_file ("open-with-dialog.pc.in" "open-with-dialog.pc" @ONLY)
 
-target_link_libraries (${EXE_NAME}
-    Qt5::Widgets Qt5::DBus Qt5::X11Extras
-    ${DtkWidget_LIBRARIES}
-    ${GIOMM_LIBRARIES}
-    ${GIOUNIX_INCLUDE_DIRS}
-)
 
-#generate lib
-add_library(${LIB_NAME} SHARED
-    ${OPENWITH_CPP_FILES}
-    ${OPENWITH_HEADER_FILES}
-    ${OPENWITH_QRC_FILES}
-)
+add_subdirectory (src)
 
-target_include_directories(${LIB_NAME} PUBLIC
-    ${DtkWidget_INCLUDE_DIRS}
-    ${GIOMM_INCLUDE_DIRS}
-    ${GIOUNIX_INCLUDE_DIRS}
-)
-
-target_link_libraries (${LIB_NAME}
-    Qt5::Widgets Qt5::DBus Qt5::X11Extras
-    ${DtkWidget_LIBRARIES}
-    ${GIOMM_LIBRARIES}
-    ${GIOUNIX_INCLUDE_DIRS}
-)
 
 
 
