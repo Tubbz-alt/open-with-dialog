@@ -2,8 +2,6 @@ cmake_minimum_required(VERSION 2.8)
 
 project(open-with-dialog)
 
-add_definitions(-std=c++11)
-
 include(GNUInstallDirs)
 
 # Install settings
@@ -11,6 +9,8 @@ if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set(CMAKE_INSTALL_PREFIX /usr CACHE PATH "default install prefix" FORCE)
 endif ()
 
+# C++ Standard
+set(CMAKE_CXX_STANDARD_REQUIRED 11)
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Instruct CMake to run moc automatically when needed
