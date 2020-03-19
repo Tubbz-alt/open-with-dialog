@@ -23,14 +23,15 @@
 #include "commandlinemanager.h"
 
 CommandLineManager::CommandLineManager() :
-    m_mimeTypeOption({"m", "mimetype"}, QCoreApplication::translate("main", "please give a mimetype name when you want to open a file with the specified mimetype"), "name")
+    m_mimeTypeOption({"m", "mimetype"}, QCoreApplication::translate("main", "please give a mimetype name when you want to open a file with the specified mimetype."), "name")
 {
-    m_commandLineParser.setApplicationDescription("Open a file from a specific application");
+    m_commandLineParser.setApplicationDescription("Open a file from a specific application. \n"
+                                                  "Example: ./open-with-dialog file:///home/liuyang/Music/abcd.txt --mimetype=text/plain");
     m_commandLineParser.addHelpOption();
     m_commandLineParser.addVersionOption();
     m_commandLineParser.addOption(m_mimeTypeOption);
 //    m_commandLineParser.addPositionalArgument("file", QCoreApplication::translate("main", "The file to open."));
-    m_commandLineParser.addPositionalArgument("urls", QCoreApplication::translate("main", "URLs to open, can give a few of urls. [eg: ./exec  par1 par2] "), "[urls...]");
+    m_commandLineParser.addPositionalArgument("urls", QCoreApplication::translate("main", "URLs to open, can give a few of urls. [example: ./exec  URL1 URL2 ...] "), "[urls...]");
 }
 
 void CommandLineManager::process(const QCoreApplication &app)
@@ -51,4 +52,14 @@ QString CommandLineManager::mimeTypeData()
 QStringList CommandLineManager::urlsData()
 {
     return m_commandLineParser.positionalArguments();
+}
+
+QString CommandLineManager::helpText()
+{
+    return m_commandLineParser.helpText();
+}
+
+void CommandLineManager::showHelp()
+{
+    m_commandLineParser.showHelp();
 }

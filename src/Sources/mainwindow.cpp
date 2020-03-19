@@ -150,10 +150,11 @@ MainWindow::MainWindow(const QStringList &urls, QString mimeTypeName, QWidget *p
 //    m_urls << QUrl("file:/usr/share/applications/org.gnome.Evolution.desktop");
 //    m_urls << "file:///home/liuyang/Music/123.txt";
 
-    m_urls << "file:///home/liuyang/Music/abcd.txt";
+//    m_urls << "file:///home/liuyang/Music/abcd.txt";
+//    qDebug() << m_urls;
 
-    qDebug() << "----------------------------------------";
-    qDebug() << m_urls;
+
+    qDebug() << "------------------parameter url----------------------";
 
     m_titlebar = new DTitlebar(this);
     m_titlebar->setBackgroundTransparent(true);

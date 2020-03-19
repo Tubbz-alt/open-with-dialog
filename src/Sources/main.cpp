@@ -60,15 +60,15 @@ int main(int argc, char *argv[])
     cmdMng.process(app.arguments());
 
     qDebug() << "-----------------parse cmd line-----------------------";
-    qDebug() << cmdMng.mimeTypeData();
     qDebug() << cmdMng.urlsData();
+    qDebug() << cmdMng.mimeTypeData();
 
-//    if (cmdMng.urlsData().isEmpty()) {
-//        qDebug() << "---------------------------- Not give url parameter!";
-//        exit(EXIT_FAILURE);
-//    }
+    if (cmdMng.urlsData().isEmpty()) {
+        qDebug() << "-----------------Not give url parameter!-----------------------";
+        cmdMng.showHelp();
 
-//    QTimer::singleShot(100, mimeAppsManager, &MimesAppsManager::requestUpdateCache);
+        //        exit(EXIT_FAILURE);
+    }
 
 #if 1
     MainWindow mw(cmdMng.urlsData(), cmdMng.mimeTypeData());

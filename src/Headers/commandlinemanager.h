@@ -37,6 +37,9 @@ public:
     QString mimeTypeData();
     QStringList urlsData();
 
+    QString helpText();
+    [[ noreturn ]] void showHelp();
+
 private:
     QCommandLineParser m_commandLineParser;
     QCommandLineOption m_mimeTypeOption;
